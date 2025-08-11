@@ -605,6 +605,13 @@ class Workflow:
                     if isinstance(labelled_molecule[parameter_key.tag], list)
                     else [*labelled_molecule[parameter_key.tag].values()]
                 )
+                if not labelled_parameters:
+                    print(f"[DEBUG] No labelled parameters found for parameter_key:")
+                    print(f"  tag     : {parameter_key.tag}")
+                    print(f"  smirks  : {parameter_key.smirks}")
+                    print(f"  tagged_dict type: {type(labelled_molecule[parameter_key.tag])}")
+
+                    continue  # Skip this parameter_key
 
                 if isinstance(labelled_parameters[0], list):
                     # Virtual sites create a nested list, so unwrap it ... unless we
@@ -619,7 +626,11 @@ class Workflow:
                         and parameter.smirks != parameter_key.smirks
                     ):
                         continue
-
+                    print(f"[DEBUG] MATCH FOUND:")
+                    print(f"  Tag     : {parameter_key.tag}")
+                    print(f"  SMIRKS  : {parameter_key.smirks}")
+                    print(f"  Matched : {parameter.smirks}")
+                    print("---------------------------------------------------------------------------------")
                     contains_parameter = True
                     break
 
