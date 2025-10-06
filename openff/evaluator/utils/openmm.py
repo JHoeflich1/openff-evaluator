@@ -272,6 +272,18 @@ def system_subset(
     # Create the parameterized sub-system.
 
     system = _strip_cmm_force(force_field_subset.create_openmm_system(topology))
+
+    # this is a targeted hack which will not work with virtual sites!
+    
+    match system.getNumParticles():
+        case topology.n_atoms:
+            pass
+        case 0:
+            for atom in topology.atoms:
+                system.addParticle(mass=atom.mass.m)
+        case _:
+            raise Exception("weird number of particles")
+    
     return system, parameter_value
 
 
